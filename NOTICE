@@ -1,0 +1,9 @@
+The original code and documentation in this repository are dedicated to the
+public domain under CC0 1.0 Universal. See LICENSE.
+
+That dedication does not cover third-party material:
+
+  data/bunny/bun_zipper_res2.ply
+
+That mesh comes from the Stanford 3D Scanning Repository and stays under
+Stanford's terms. See data/bunny/NOTICE.
