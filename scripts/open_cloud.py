@@ -2,8 +2,8 @@
 # SPDX-License-Identifier: CC0-1.0
 """Open an ASCII PLY point cloud and print a summary.
 
-Viewing, segmentation, and ICP come later.
 This script only reads the file and describes the points.
+Viewing is scripts/view_cloud.py. Tracking and ICP come later.
 """
 
 from __future__ import annotations
