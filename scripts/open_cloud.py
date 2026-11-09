@@ -134,7 +134,7 @@ def main(argv: list[str] | None = None) -> int:
         nargs="?",
         type=Path,
         default=default_cloud(),
-        help="PLY file (default: Stanford Bunny, res2)",
+        help="PLY file (default: data/bunny/bun_zipper_res2.ply)",
     )
     args = parser.parse_args(argv)
     path = args.path
