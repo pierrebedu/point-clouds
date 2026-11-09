@@ -2,32 +2,41 @@
 
 A small repo for learning point clouds on a CPU, without a heavy dataset.
 
-Planned path:
+Two branches, and one bonus:
 
-1. **Open** a cloud and read what it contains. This is the current script.
-2. **View** the cloud.
-3. **Segment** an object in a scene.
-4. **ICP**: align a partial scan to a known 3D model.
+- **`main`** — open one cloud and look at it.
+- **`video`** — follow a person through a short sequence.
+- **ICP**, later — align one cloud to another. Not required for the two steps above.
 
-Only the first step is implemented.
+Everything is a point cloud. ROS 2 is the viewer: RViz2 displays a `sensor_msgs/PointCloud2`, for one frozen cloud and for a cloud that changes over time.
 
-## Dataset
+## Clouds
 
-[Stanford Bunny](https://graphics.stanford.edu/data/3Dscanrep/), the usual small reference model in 3D geometry, already used for reconstruction and registration.
+The smallest clouds that still show the idea.
 
-The file in this repo is `data/bunny/bun_zipper_res2.ply`.
+### Static — the bunny (`main`)
 
-- reconstructed bunny, decimated `res2` version;
-- 8,171 points, about 650 KB;
-- the full reconstruction (`bun_zipper.ply`) has 35,947 points. `res2` is enough to learn on without loading the machine.
+[Stanford Bunny](https://graphics.stanford.edu/data/3Dscanrep/), file `data/bunny/bun_zipper_res2.ply`, already in this repo.
 
-Vertices carry `x y z`, plus `confidence` and `intensity` from the scanner. The file also contains faces: it is a mesh. The script treats the vertices as a point cloud and only reports the face count.
+- one object, no time;
+- decimated reconstruction (`res2`): 8,171 points, about 650 KB;
+- the full reconstruction has 35,947 points. `res2` is enough here.
 
-This mesh is the known 3D model for the later ICP step. The original partial scans (`bun000`, `bun045`, and so on) stay on the Stanford site until that step. The bunny is a single object: segmenting a scene (a table, several objects) will use another cloud of the same small size.
+Vertices carry `x y z`, plus `confidence` and `intensity`. The file also contains faces: it is a mesh. The script reads the vertices as a point cloud and only reports the face count.
 
-## Open the cloud
+### People walking — `walking_static` (`video`)
 
-Python 3 and the standard library only. There is no window: viewing is the next step.
+[TUM RGB-D](https://cvg.cit.tum.de/data/datasets/rgbd-dataset/download), sequence `freiburg3/walking_static`.
+
+- the camera stays still and two people walk through an office;
+- about 25 seconds, archive about 0.48 GB;
+- RGB images and depth images, not a PLY. Each depth frame is one point cloud.
+
+The archive is not in this repo. The published ground truth is the camera trajectory, not a track of each person. The people are the moving part of the cloud; following one of them is the work of the `video` branch.
+
+## Open (`main`)
+
+This step exists. Python 3 and the standard library only.
 
 ```bash
 python3 scripts/open_cloud.py
@@ -40,6 +49,22 @@ python3 scripts/open_cloud.py path/to/cloud.ply
 ```
 
 The output is the point count, the properties, the other elements in the file, then the min, max, and mean of `x`, `y`, and `z`.
+
+## View (`main`)
+
+RViz2 is the window. A small node will read the bunny and publish it once as a `sensor_msgs/PointCloud2`. In RViz2, add a PointCloud2 display on that topic.
+
+That node is not written yet. Opening the file is the step that exists today. The same display is what `video` reuses when the cloud starts to move.
+
+## Track (`video`)
+
+On the `video` branch, play `walking_static` as a stream of point clouds and follow one person from frame to frame. The sensor does not move, so a change in the cloud is someone walking.
+
+Nothing on this branch is written yet.
+
+## ICP (bonus)
+
+Align one cloud to another: a partial view to the bunny, or one frame of the walk to the next. Useful once a cloud can be opened, shown, and followed. Not part of the path above.
 
 ## License
 
