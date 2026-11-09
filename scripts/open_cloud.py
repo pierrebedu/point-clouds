@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: CC0-1.0
 """Open an ASCII PLY point cloud and print a summary.
 
 Viewing, segmentation, and ICP come later.
